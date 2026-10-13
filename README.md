@@ -3,6 +3,8 @@
 A clickable prototype of a guided check for one support problem: **"My WhatsApp keyword auto-reply isn't working."**
 A non-technical user opens it from the Keywords page. The guide asks one question at a time, explains why each check matters, and lets the user fix a demo rule themselves and confirm a simulated test. If the cause can't be confirmed, they get a reviewable summary to send to support.
 
+First-time visitors are offered a 7-step **product tour** (also available from **Take the tour** in the header). It spotlights the real UI, waits for you to click Troubleshoot, then continues inside the guide.
+
 > Independent concept for the Cheerio Product Intern assignment. Not an official Cheerio product or connected account. Northstar Apparel, its rules and every outcome are fictional demo data. Nothing sends WhatsApp messages or creates support tickets.
 
 ## Run it locally
@@ -61,11 +63,12 @@ Switching scenarios or pressing **Reset demo** restores the original fixture and
 | `styles.css` | Cheerio-inspired styling (purple accent, Onest + DM Sans), responsive and reduced-motion |
 | `flow.js` | Scenarios, step content, branching state machine, simulator and support summary. Pure functions, no DOM |
 | `app.js` | Renders state and wires up events, focus management and the handoff actions |
-| `flow.test.js` | 23 tests for exact matching, the success guard, branching, invalidation, resets and the summary |
+| `tour.js` | Product tour: steps, card placement, and a spotlight built on the Popover API so it can sit above the modal drawer |
+| `flow.test.js`, `tour.test.js` | 30 tests: exact matching, the success guard, branching, invalidation, resets, the summary, and tour card placement |
 
 ## Verification (13 Oct 2026)
 
-Checked in a Chromium browser at 1024×768 and at 375×812 (mobile emulation), plus `node --test` (23/23 passing).
+Checked in a Chromium browser at 1024×768 and at 375×812 (mobile emulation), plus `node --test` (30/30 passing).
 
 - [x] Keywords table shows the fictional "Pricing reply" rule. **Troubleshoot** and **Auto-reply not working?** both open the same guide.
 - [x] Path 1: "did not arrive" → Inbox "Yes" → `price` vs `PRICE` explained as a possible cause → manual edit and save → labelled simulation → "Yes, in this demo" → demo success with a change summary. Closing shows `price` and "Edited in demo" in the table; Reset demo restores `PRICE`.
@@ -76,6 +79,7 @@ Checked in a Chromium browser at 1024×768 and at 375×812 (mobile emulation), p
 - [x] "I'm not sure" explains once, then hands off. The complex-workflow escape hatch and "I can't edit this rule" each lead to a handoff.
 - [x] Back keeps answers; changing an earlier answer clears the results that depended on it. A failed re-test allows one more fix, then only human help. **Start over** asks for confirmation when a demo edit exists.
 - [x] Keyboard: Tab stays in the drawer with a visible focus ring, Enter activates options, focus moves to each new step heading, and Esc closes and returns focus to the trigger. Reopening resumes where you left off.
+- [x] Product tour: a first-visit prompt ("Not now" is remembered) and the header button both start it. All 7 steps spotlight the right element. Clicking the real Troubleshoot button or "Open it for me" continues inside the drawer. Back leaves the drawer, Esc or Skip end only the tour, and choosing the suggested answer finishes it. On phones the card docks opposite the target.
 - [x] Mobile: no horizontal scroll, the table becomes cards, navigation collapses to a menu, and the guide is full-screen.
 
 **Limits of this check:**

@@ -44,6 +44,7 @@
     <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
     <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
     <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z"/></symbol>
   </svg>
 
   <a class="skip-link" href="#main">Skip to content</a>
@@ -86,6 +87,7 @@
         </button>
         <p class="crumbs">Automation <span aria-hidden="true">/</span> <strong>Keywords</strong></p>
         <span class="concept-badge">Interactive concept · Demo data</span>
+        <button type="button" class="btn btn-ghost btn-sm tour-btn" data-tour="start"><svg class="ico ico-sm" aria-hidden="true"><use href="#i-compass"/></svg>Take the tour</button>
 
         <div class="proto" role="group" aria-labelledby="proto-title">
           <span class="proto-title" id="proto-title"><svg class="ico ico-sm" aria-hidden="true"><use href="#i-flask"/></svg>Prototype controls</span>
@@ -145,5 +147,29 @@
       <p class="sr-only" id="announcer" aria-live="polite"></p>
     </div>
   </dialog>
+
+  <!-- Product tour (tour.js). Popovers so they can sit above the modal drawer. -->
+  <div class="tour-spot" id="tour-spot" popover="manual" aria-hidden="true"></div>
+  <div class="tour-card" id="tour-card" popover="manual" role="dialog" aria-labelledby="tour-title" aria-describedby="tour-body">
+    <p class="tour-count" id="tour-count"></p>
+    <h2 class="tour-title" id="tour-title"></h2>
+    <p class="tour-body" id="tour-body"></p>
+    <div class="tour-actions">
+      <button type="button" class="tour-skip" data-tour="skip">Skip tour</button>
+      <span class="tour-nav">
+        <button type="button" class="btn btn-ghost btn-sm" data-tour="back">Back</button>
+        <button type="button" class="btn btn-primary btn-sm" data-tour="next">Next</button>
+      </span>
+    </div>
+  </div>
+  <aside class="tour-prompt" id="tour-prompt" aria-label="Product tour" hidden>
+    <span class="tour-new">New</span>
+    <p class="tour-prompt-title">Troubleshoot auto-replies</p>
+    <p class="tour-prompt-body">A 1-minute tour of how a customer fixes a broken keyword reply, or reaches a person, without raising a ticket.</p>
+    <div class="btn-row">
+      <button type="button" class="btn btn-primary btn-sm" data-tour="start">Take the tour</button>
+      <button type="button" class="btn btn-ghost btn-sm" data-tour="dismiss">Not now</button>
+    </div>
+  </aside>
 </body>
 </html>

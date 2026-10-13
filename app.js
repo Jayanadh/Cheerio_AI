@@ -5,6 +5,7 @@ import {
   createState, reduce, currentComparison, explainComparison, explainSimFailure, explainSaved, testTextOf, canRetry,
   ruleChanges, buildSummary, mailtoHref,
 } from './flow.js';
+import { initTour } from './tour.js';
 
 let state = createState();
 // View-only state that the flow doesn't need to know about.
@@ -592,3 +593,4 @@ $('#sidebar').addEventListener('click', (e) => { if (e.target.closest('a')) clos
 
 render();
 setStatus();
+initTour();
