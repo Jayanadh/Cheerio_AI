@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cheerio Troubleshoot · Interactive concept</title>
+  <meta name="description" content="Interactive concept: a guided check for WhatsApp keyword auto-replies, with a useful human-support handoff. Fictional demo data only.">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%238A43E1'/%3E%3Cpath d='M11 23.5A8.5 8.5 0 1 0 8 20.2L6.5 25z' fill='none' stroke='white' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Onest:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <!-- Icons: Lucide (ISC licence), inlined as a sprite -->
+  <svg xmlns="http://www.w3.org/2000/svg" hidden>
+    <symbol id="i-overview" viewBox="0 0 24 24"><rect width="7" height="9" x="3" y="3" rx="1"/><rect width="7" height="5" x="14" y="3" rx="1"/><rect width="7" height="9" x="14" y="12" rx="1"/><rect width="7" height="5" x="3" y="16" rx="1"/></symbol>
+    <symbol id="i-inbox" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></symbol>
+    <symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></symbol>
+    <symbol id="i-key" viewBox="0 0 24 24"><path d="m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4"/><path d="m21 2-9.6 9.6"/><circle cx="7.5" cy="15.5" r="5.5"/></symbol>
+    <symbol id="i-workflow" viewBox="0 0 24 24"><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></symbol>
+    <symbol id="i-megaphone" viewBox="0 0 24 24"><path d="m3 11 18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></symbol>
+    <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 12h16"/><path d="M4 6h16"/><path d="M4 18h16"/></symbol>
+    <symbol id="i-flask" viewBox="0 0 24 24"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></symbol>
+    <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+    <symbol id="i-wrench" viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></symbol>
+    <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></symbol>
+    <symbol id="i-chevron-right" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></symbol>
+    <symbol id="i-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+    <symbol id="i-check-circle" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/><path d="M12 9v4"/><path d="M12 17h.01"/></symbol>
+    <symbol id="i-lifebuoy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/><circle cx="12" cy="12" r="4"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></symbol>
+    <symbol id="i-mail" viewBox="0 0 24 24"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="i-chat" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></symbol>
+  </svg>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <div class="app">
+    <aside class="sidebar" id="sidebar" aria-label="Workspace navigation">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><svg class="ico"><use href="#i-chat"/></svg></span>
+        <span class="brand-name">Cheerio</span>
+        <span class="brand-tag">concept</span>
+      </div>
+
+      <nav class="nav" aria-label="Main">
+        <ul>
+          <li><span class="nav-item"><svg class="ico" aria-hidden="true"><use href="#i-overview"/></svg>Overview</span></li>
+          <li><span class="nav-item"><svg class="ico" aria-hidden="true"><use href="#i-inbox"/></svg>Inbox</span></li>
+          <li>
+            <span class="nav-item nav-group"><svg class="ico" aria-hidden="true"><use href="#i-zap"/></svg>Automation<svg class="ico ico-sm nav-caret" aria-hidden="true"><use href="#i-chevron-down"/></svg></span>
+            <ul class="subnav">
+              <li><a class="nav-item is-active" href="#main" aria-current="page"><svg class="ico" aria-hidden="true"><use href="#i-key"/></svg>Keywords</a></li>
+              <li><span class="nav-item"><svg class="ico" aria-hidden="true"><use href="#i-workflow"/></svg>Workflows</span></li>
+            </ul>
+          </li>
+          <li><span class="nav-item"><svg class="ico" aria-hidden="true"><use href="#i-megaphone"/></svg>Campaigns</span></li>
+          <li><span class="nav-item"><svg class="ico" aria-hidden="true"><use href="#i-help"/></svg>Help</span></li>
+        </ul>
+        <p class="nav-note">Only Keywords is built in this concept. Other sections are illustrative.</p>
+      </nav>
+
+      <div class="workspace">
+        <span class="avatar" aria-hidden="true">NA</span>
+        <span class="workspace-text"><strong>Northstar Apparel</strong><small>Demo workspace</small></span>
+      </div>
+    </aside>
+
+    <div class="main-col">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" type="button" id="menu-btn" aria-controls="sidebar" aria-expanded="false" aria-label="Open navigation">
+          <svg class="ico" aria-hidden="true"><use href="#i-menu"/></svg>
+        </button>
+        <p class="crumbs">Automation <span aria-hidden="true">/</span> <strong>Keywords</strong></p>
+        <span class="concept-badge">Interactive concept · Demo data</span>
+
+        <div class="proto" role="group" aria-labelledby="proto-title">
+          <span class="proto-title" id="proto-title"><svg class="ico ico-sm" aria-hidden="true"><use href="#i-flask"/></svg>Prototype controls</span>
+          <label class="sr-only" for="scenario">Demo scenario</label>
+          <select id="scenario" class="select"></select>
+          <button type="button" class="btn btn-ghost btn-sm" id="reset-demo"><svg class="ico ico-sm" aria-hidden="true"><use href="#i-rotate"/></svg>Reset demo</button>
+          <p class="proto-status" id="proto-status" aria-live="polite"></p>
+        </div>
+      </header>
+
+      <main id="main" tabindex="-1">
+        <div class="page-head">
+          <h1>WhatsApp keyword replies</h1>
+          <p class="page-sub">When a customer's WhatsApp message matches a keyword, the rule's action runs automatically.</p>
+        </div>
+
+        <section class="card" aria-labelledby="rules-title">
+          <div class="card-head">
+            <h2 class="card-title" id="rules-title">Keyword rules <span class="count">5</span></h2>
+            <button type="button" class="link-btn" data-open>
+              <svg class="ico ico-sm" aria-hidden="true"><use href="#i-help"/></svg>Auto-reply not working?
+            </button>
+          </div>
+          <table class="rules">
+            <thead>
+              <tr><th scope="col">Rule and keywords</th><th scope="col">Matching</th><th scope="col">Reply action</th><th scope="col">Status</th><th scope="col"><span class="sr-only">Troubleshoot</span></th></tr>
+            </thead>
+            <tbody id="rules-body"></tbody>
+          </table>
+        </section>
+
+        <p class="disclaimer">
+          <strong>Cheerio Troubleshoot</strong> is an independent interactive concept, not an official Cheerio product or a connected Cheerio account.
+          Northstar Apparel, its rules and every test outcome are fictional demo data. Nothing here sends WhatsApp messages or creates support tickets.
+        </p>
+      </main>
+    </div>
+  </div>
+
+  <dialog class="drawer" id="drawer" aria-labelledby="drawer-title">
+    <div class="drawer-inner">
+      <header class="drawer-head">
+        <div class="drawer-title-row">
+          <div>
+            <h2 class="drawer-title" id="drawer-title">Troubleshoot auto-reply</h2>
+            <p class="drawer-sub">Pricing reply <span class="tag tag-demo">Demo rule</span></p>
+          </div>
+          <div class="drawer-tools">
+            <button type="button" class="btn btn-ghost btn-sm" data-ui="startOver"><svg class="ico ico-sm" aria-hidden="true"><use href="#i-rotate"/></svg><span class="btn-label">Start over</span></button>
+            <button type="button" class="icon-btn" data-action="close" aria-label="Close troubleshooting"><svg class="ico" aria-hidden="true"><use href="#i-x"/></svg></button>
+          </div>
+        </div>
+        <ol class="stages" id="stages" aria-label="Progress"></ol>
+      </header>
+      <div class="drawer-body" id="drawer-body"></div>
+      <footer class="drawer-foot" id="drawer-foot"></footer>
+      <p class="sr-only" id="announcer" aria-live="polite"></p>
+    </div>
+  </dialog>
+</body>
+</html>
